@@ -24,11 +24,9 @@ namespace PatientApi.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Patient>()
-                .HasIndex(p => p.NameId)
-                .IsUnique();
+                .HasKey(p => p.NameId);
 
             modelBuilder.Entity<Patient>()
-                .HasNoKey()
                 .HasIndex(p => p.BirthDate);
 
             modelBuilder.Entity<Patient>()

@@ -12,7 +12,7 @@ using PatientApi.Data;
 namespace PatientApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250201113218_initial")]
+    [Migration("20250201163109_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -25,10 +25,31 @@ namespace PatientApi.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("PatientApi.Models.Patient", b =>
+            modelBuilder.Entity("PatientApi.Models.Name", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Family")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("GivenSerialized")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Use")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Names");
+                });
+
+            modelBuilder.Entity("PatientApi.Models.Patient", b =>
+                {
+                    b.Property<Guid>("NameId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("Active")
@@ -37,25 +58,26 @@ namespace PatientApi.Migrations
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Family")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Gender")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Given")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MiddleName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
+                    b.HasKey("NameId");
 
                     b.HasIndex("BirthDate");
 
                     b.ToTable("Patients");
+                });
+
+            modelBuilder.Entity("PatientApi.Models.Patient", b =>
+                {
+                    b.HasOne("PatientApi.Models.Name", "Name")
+                        .WithOne()
+                        .HasForeignKey("PatientApi.Models.Patient", "NameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Name");
                 });
 #pragma warning restore 612, 618
         }

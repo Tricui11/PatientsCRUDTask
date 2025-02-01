@@ -46,6 +46,9 @@ namespace PatientApi.Migrations
 
             modelBuilder.Entity("PatientApi.Models.Patient", b =>
                 {
+                    b.Property<Guid>("NameId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
 
@@ -56,13 +59,9 @@ namespace PatientApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("NameId")
-                        .HasColumnType("uniqueidentifier");
+                    b.HasKey("NameId");
 
                     b.HasIndex("BirthDate");
-
-                    b.HasIndex("NameId")
-                        .IsUnique();
 
                     b.ToTable("Patients");
                 });
