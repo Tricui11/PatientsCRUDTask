@@ -18,6 +18,10 @@ namespace PatientApi.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Получить список всех пациентов.
+        /// </summary>
+        /// <returns>Список пациентов.</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PatientDto>>> GetPatients()
         {
@@ -41,6 +45,11 @@ namespace PatientApi.Controllers
             return Ok(patients);
         }
 
+        /// <summary>
+        /// Получить информацию о пациенте по идентификатору.
+        /// </summary>
+        /// <param name="id">Идентификатор пациента.</param>
+        /// <returns>Объект пациента.</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<PatientDto>> GetPatient(Guid id)
         {
@@ -68,7 +77,11 @@ namespace PatientApi.Controllers
             return Ok(patientDto);
         }
 
-
+        /// <summary>
+        /// Создать нового пациента.
+        /// </summary>
+        /// <param name="dto">Данные пациента.</param>
+        /// <returns>Созданный пациент.</returns>
         [HttpPost]
         public async Task<ActionResult<PatientDto>> CreatePatient(PatientDto dto)
         {
@@ -105,7 +118,11 @@ namespace PatientApi.Controllers
             });
         }
 
-
+        /// <summary>
+        /// Обновить информацию о пациенте.
+        /// </summary>
+        /// <param name="id">Идентификатор пациента.</param>
+        /// <param name="dto">Новые данные пациента.</param>
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdatePatient(Guid id, PatientDto dto)
         {
@@ -127,6 +144,10 @@ namespace PatientApi.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Удалить пациента.
+        /// </summary>
+        /// <param name="id">Идентификатор пациента.</param>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePatient(Guid id)
         {
@@ -142,6 +163,31 @@ namespace PatientApi.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Searches for patients by birth date with optional comparison operators.
+        /// </summary>
+        /// <param name="birthDate">
+        /// The birth date filter.  
+        /// Supported formats:
+        /// - Exact date: `YYYY-MM-DD` (e.g., `1985-05-20`)  
+        /// - Year only: `YYYY` (e.g., `1990`)  
+        /// - Year and month: `YYYY-MM` (e.g., `1990-05`)  
+        /// - Comparison operators:
+        ///   - `gtYYYY-MM-DD` (greater than)  
+        ///   - `ltYYYY-MM-DD` (less than)  
+        ///   - `geYYYY-MM-DD` (greater or equal)  
+        ///   - `leYYYY-MM-DD` (less or equal)  
+        ///   - `eqYYYY-MM-DD` (equal)  
+        ///   - `neYYYY-MM-DD` (not equal)  
+        ///   - `saYYYY-MM-DD` (start after)  
+        ///   - `ebYYYY-MM-DD` (ends before)  
+        ///   - `apYYYY-MM-DD` (approximately)  
+        /// </param>
+        /// <returns>
+        /// A list of matching patients in DTO format.
+        /// </returns>
+        /// <response code="200">Returns the list of found patients.</response>
+        /// <response code="400">If the birthDate format is invalid.</response>
         [HttpGet("search")]
         public async Task<ActionResult<IEnumerable<PatientDto>>> SearchPatients([FromQuery] string birthDate)
         {
