@@ -29,6 +29,10 @@ namespace PatientApi.Data
                 .HasIndex(p => p.BirthDate);
 
             modelBuilder.Entity<Patient>()
+                .Property(p => p.BirthDate)
+                .HasColumnType("datetime2(0)");
+
+            modelBuilder.Entity<Patient>()
                 .Property(p => p.Gender)
                 .HasConversion<string>();
 

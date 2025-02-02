@@ -41,13 +41,12 @@ class Program
         string[] maleMiddleNames = { "Иванович", "Алексеевич", "Петрович", "Васильевич", "Сергеевич" };
         string[] femaleMiddleNames = { "Ивановна", "Алексеевна", "Петровна", "Васильевна", "Сергеевна" };
         string[] lastNames = { "Иванов", "Петров", "Сидоров", "Кузнецов", "Смирнов" };
-        string[] genders = { "male", "female", "other", "unknown" };
 
         bool isMale = _random.Next(2) == 0;
         string firstName = isMale ? maleFirstNames[_random.Next(maleFirstNames.Length)] : femaleFirstNames[_random.Next(femaleFirstNames.Length)];
         string middleName = isMale ? maleMiddleNames[_random.Next(maleMiddleNames.Length)] : femaleMiddleNames[_random.Next(femaleMiddleNames.Length)];
         string lastName = lastNames[_random.Next(lastNames.Length)];
-        string gender = genders[_random.Next(genders.Length)];
+        string gender = isMale ? "male" : "female";
 
         return new
         {
@@ -59,7 +58,14 @@ class Program
                 given = new[] { firstName, middleName }
             },
             gender,
-            birthDate = DateTime.UtcNow.AddYears(-_random.Next(1, 100)).ToString("yyyy-MM-ddTHH:mm:ss"),
+            birthDate = DateTime.UtcNow
+                .AddYears(-_random.Next(1, 20))
+                .AddMonths(-_random.Next(1, 12))
+                .AddDays(-_random.Next(1, 31))
+                .AddHours(-_random.Next(1, 24))
+                .AddMinutes(-_random.Next(1, 60))
+                .AddSeconds(-_random.Next(1, 60))
+                .ToString("yyyy-MM-ddTHH:mm:ss"),
             active = _random.Next(2) == 0
         };
     }

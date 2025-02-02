@@ -2,8 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using PatientApi.Data;
 using PatientApi.DTOs;
+using PatientApi.Helpers;
 using PatientApi.Models;
-using System.Globalization;
 
 namespace PatientApi.Controllers
 {
@@ -85,10 +85,12 @@ namespace PatientApi.Controllers
         [HttpPost]
         public async Task<ActionResult<PatientDto>> CreatePatient(PatientDto dto)
         {
+            var birthDateWithoutMilliseconds = dto.BirthDate.AddMilliseconds(-dto.BirthDate.Millisecond);
+
             var patient = new Patient
             {
                 Gender = Enum.TryParse(dto.Gender, true, out Gender gender) ? gender : Gender.Unknown,
-                BirthDate = dto.BirthDate,
+                BirthDate = birthDateWithoutMilliseconds,
                 Active = dto.Active,
                 Name = new Name
                 {
@@ -151,12 +153,11 @@ namespace PatientApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePatient(Guid id)
         {
-            var patient = await _context.Patients.Include(x => x.Name).FirstOrDefaultAsync(x => x.NameId == id);
-            if (patient == null)
+            var name = await _context.Names.FirstOrDefaultAsync(x => x.Id == id);
+            if (name == null)
                 return NotFound();
 
-            _context.Patients.Remove(patient);
-            _context.Names.Remove(patient.Name);
+            _context.Names.Remove(name);
 
             await _context.SaveChangesAsync();
 
@@ -195,71 +196,51 @@ namespace PatientApi.Controllers
                 return BadRequest("birthDate parameter is required.");
 
             var query = _context.Patients.AsQueryable();
-            DateTimeOffset dateTimeOffset;
+            DateTime dateTime;
 
+            // Проверка оператора (gt, lt, ge, le, eq, ne и т.д.)
             string operatorPrefix = birthDate.Substring(0, 2);
 
             if (operatorPrefix == "gt" || operatorPrefix == "lt" || operatorPrefix == "ge" || operatorPrefix == "le" ||
                 operatorPrefix == "eq" || operatorPrefix == "ne" || operatorPrefix == "sa" || operatorPrefix == "eb" || operatorPrefix == "ap")
             {
-                if (!TryParseBirthDate(birthDate.Substring(2), out dateTimeOffset))
+                var dateStr = birthDate.Substring(2);
+
+                if (!CustomDateParser.TryParseDate(dateStr, out dateTime))
                     return BadRequest("Invalid birthDate format.");
 
                 switch (operatorPrefix)
                 {
                     case "gt":
-                        query = query.Where(p => p.BirthDate > dateTimeOffset);
+                    case "sa":
+                        query = query.Where(p => p.BirthDate > dateTime);
                         break;
                     case "lt":
-                        query = query.Where(p => p.BirthDate < dateTimeOffset);
+                    case "eb":
+                        query = query.Where(p => p.BirthDate < dateTime);
                         break;
                     case "ge":
-                        query = query.Where(p => p.BirthDate >= dateTimeOffset);
+                        query = query.Where(p => p.BirthDate >= dateTime);
                         break;
                     case "le":
-                        query = query.Where(p => p.BirthDate <= dateTimeOffset);
+                        query = query.Where(p => p.BirthDate <= dateTime);
                         break;
                     case "eq":
-                        query = query.Where(p => p.BirthDate == dateTimeOffset);
+                        query = query.Where(p => p.BirthDate.Date == dateTime.Date);
                         break;
                     case "ne":
-                        query = query.Where(p => p.BirthDate != dateTimeOffset);
-                        break;
-                    case "sa":
-                        query = query.Where(p => p.BirthDate > dateTimeOffset);
-                        break;
-                    case "eb":
-                        query = query.Where(p => p.BirthDate < dateTimeOffset);
+                        query = query.Where(p => p.BirthDate.Date != dateTime.Date);
                         break;
                     case "ap":
-                        query = query.Where(p => p.BirthDate == dateTimeOffset);
+                        TimeSpan range = DateTime.UtcNow - dateTime;
+                        TimeSpan tolerance = TimeSpan.FromTicks((long)(range.Ticks * 0.1));
+                        query = query.Where(p => p.BirthDate >= dateTime - tolerance && p.BirthDate <= dateTime + tolerance);
                         break;
                 }
             }
-            else if (birthDate.Length == 4)
+            else if (CustomDateParser.TryParseDate(birthDate, out dateTime))
             {
-                var year = int.Parse(birthDate);
-                var startOfYear = new DateTime(year, 1, 1);
-                var endOfYear = new DateTime(year, 12, 31, 23, 59, 59);
-                query = query.Where(p => p.BirthDate >= startOfYear && p.BirthDate <= endOfYear);
-            }
-            else if (birthDate.Length == 7)
-            {
-                var parts = birthDate.Split('-');
-                var year = int.Parse(parts[0]);
-                var month = int.Parse(parts[1]);
-
-                var startOfMonth = new DateTime(year, month, 1);
-                var endOfMonth = startOfMonth.AddMonths(1).AddTicks(-1);
-                query = query.Where(p => p.BirthDate >= startOfMonth && p.BirthDate <= endOfMonth);
-            }
-            else if (TryParseBirthDate(birthDate, out dateTimeOffset))
-            {
-                query = query.Where(p => p.BirthDate == dateTimeOffset);
-            }
-            else if (DateTime.TryParse(birthDate, out var date))
-            {
-                query = query.Where(p => p.BirthDate.Date == date.Date);
+                query = query.Where(p => p.BirthDate == dateTime);
             }
             else
             {
@@ -284,17 +265,6 @@ namespace PatientApi.Controllers
                 .ToListAsync();
 
             return Ok(patients);
-        }
-
-        private static bool TryParseBirthDate(string birthDate, out DateTimeOffset dateTimeOffset)
-        {
-            if (DateTimeOffset.TryParseExact(birthDate, "yyyy-MM-ddTHH:mm:ss.FFFK", CultureInfo.InvariantCulture,
-                DateTimeStyles.AssumeUniversal, out dateTimeOffset))
-            {
-                return true;
-            }
-
-            return DateTimeOffset.TryParse(birthDate, out dateTimeOffset);
         }
     }
 }
