@@ -20,8 +20,7 @@ namespace PatientApi.Data
                 .HasOne(p => p.Name)
                 .WithOne()
                 .HasForeignKey<Patient>(p => p.NameId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade);
+                .IsRequired();
 
             modelBuilder.Entity<Patient>()
                 .HasKey(p => p.NameId);

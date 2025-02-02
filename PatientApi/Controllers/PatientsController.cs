@@ -24,11 +24,14 @@ namespace PatientApi.Controllers
                 .Include(p => p.Name)
                 .Select(p => new PatientDto
                 {
-                    Id = p.Name.Id,
-                    Family = p.Name.Family,
-                    Given = p.Name.Given,
+                    Name = new NameDto()
+                    {
+                        Id = p.Name.Id,
+                        Family = p.Name.Family,
+                        Given = p.Name.Given,
+                        Use = p.Name.Use,
+                    },
                     Gender = p.Gender.ToString(),
-                    Use = p.Name.Use,
                     BirthDate = p.BirthDate,
                     Active = p.Active
                 })
@@ -49,13 +52,16 @@ namespace PatientApi.Controllers
 
             var patientDto = new PatientDto
             {
-                Id = patient.Name.Id,
-                Family = patient.Name.Family,
-                Given = patient.Name.Given,
+                Name = new NameDto()
+                {
+                    Id = patient.Name.Id,
+                    Family = patient.Name.Family,
+                    Given = patient.Name.Given,
+                    Use = patient.Name.Use
+                },
                 Gender = patient.Gender.ToString(),
                 BirthDate = patient.BirthDate,
                 Active = patient.Active,
-                Use = patient.Name.Use
             };
 
             return Ok(patientDto);
@@ -72,25 +78,29 @@ namespace PatientApi.Controllers
                 Active = dto.Active,
                 Name = new Name
                 {
-                    Id = Guid.NewGuid(),
-                    Use = dto.Use,
-                    Family = dto.Family,
-                    Given = dto.Given
+                    Id = dto.Name.Id ?? Guid.NewGuid(),
+                    Use = dto.Name.Use,
+                    Family = dto.Name.Family,
+                    Given = dto.Name.Given
                 }
             };
+            patient.NameId = patient.Name.Id;
 
             _context.Patients.Add(patient);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetPatient), new { id = patient.Name.Id }, new PatientDto
             {
-                Id = patient.Name.Id,
-                Family = patient.Name.Family,
-                Given = patient.Name.Given,
+                Name = new NameDto()
+                {
+                    Id = patient.Name.Id,
+                    Family = patient.Name.Family,
+                    Given = patient.Name.Given,
+                    Use = patient.Name.Use
+                },
                 Gender = patient.Gender.ToString(),
                 BirthDate = patient.BirthDate,
                 Active = patient.Active,
-                Use = dto.Use
             });
         }
 
@@ -105,9 +115,9 @@ namespace PatientApi.Controllers
             if (patient == null)
                 return NotFound();
 
-            patient.Name.Family = dto.Family;
-            patient.Name.Given = dto.Given;
-            patient.Name.Use = dto.Use;
+            patient.Name.Family = dto.Name.Family;
+            patient.Name.Given = dto.Name.Given;
+            patient.Name.Use = dto.Name.Use;
             patient.Gender = Enum.TryParse(dto.Gender, true, out Gender gender) ? gender : Gender.Unknown;
             patient.BirthDate = dto.BirthDate;
             patient.Active = dto.Active;
@@ -119,12 +129,15 @@ namespace PatientApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePatient(Guid id)
         {
-            var patient = await _context.Patients.Include(x => x.Name).FirstOrDefaultAsync(x => x.Name.Id == id);
+            var patient = await _context.Patients.Include(x => x.Name).FirstOrDefaultAsync(x => x.NameId == id);
             if (patient == null)
                 return NotFound();
 
             _context.Patients.Remove(patient);
+            _context.Names.Remove(patient.Name);
+
             await _context.SaveChangesAsync();
+
             return NoContent();
         }
 
@@ -177,12 +190,15 @@ namespace PatientApi.Controllers
                 .Include(p => p.Name)
                 .Select(p => new PatientDto
                 {
-                    Id = p.Name.Id,
-                    Family = p.Name.Family,
-                    Given = p.Name.Given,
+                    Name = new NameDto()
+                    {
+                        Id = p.Name.Id,
+                        Family = p.Name.Family,
+                        Use = p.Name.Use,
+                        Given = p.Name.Given
+                    },
                     Gender = p.Gender.ToString(),
                     BirthDate = p.BirthDate,
-                    Use = p.Name.Use,
                     Active = p.Active
                 })
                 .ToListAsync();
