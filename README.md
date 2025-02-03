@@ -43,7 +43,7 @@ This is a RESTful API for managing patient records, developed using .NET 6 and r
 1. Ensure you have [Docker](https://www.docker.com/) installed.
 2. Clone the repository:
    ```sh
-   git clone https://github.com/your-username/patient-api.git
+   git clone https://github.com/Tricui11/PatientsCRUDTask.git
    cd patient-api
    ```
 3. Build and run the application:
