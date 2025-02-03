@@ -26,7 +26,6 @@ namespace PatientApi.Controllers
         public async Task<ActionResult<IEnumerable<PatientDto>>> GetPatients()
         {
             var patients = await _context.Patients
-                .Include(p => p.Name)
                 .Select(p => new PatientDto
                 {
                     Name = new NameDto()
