@@ -9,7 +9,7 @@ class Program
     static async Task Main()
     {
         IConfiguration config = LoadConfiguration();
-        string baseUrl = config["ApiSettings:BaseUrl"];
+        var baseUrl = Environment.GetEnvironmentVariable("ApiSettings__BaseUrl") ?? config["ApiSettings:BaseUrl"];
         string apiUrl = $"{baseUrl}/api/Patients";
 
         using HttpClient client = new();

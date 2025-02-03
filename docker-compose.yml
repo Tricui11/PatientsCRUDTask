@@ -1,0 +1,46 @@
+version: '3.4'
+
+services:
+  patientapi:
+    build:
+      context: ./
+      dockerfile: ./PatientApi/Dockerfile
+    container_name: patientapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=db;Database=patients;User Id=sa;Password=YourPassword123;MultipleActiveResultSets=true;TrustServerCertificate=true
+    image: patientapi-patientapi
+    ports:
+      - "5000:80"
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=YourPassword123
+    ports:
+      - "1433:1433"
+    networks:
+      - app-network
+
+  patientsgenerationapp:
+    build:
+      context: ./
+      dockerfile: ./PatientsGenerationApp/Dockerfile
+    container_name: patientsgenerationapp
+    depends_on:
+      - db
+    networks:
+      - app-network
+    entrypoint: ["dotnet", "PatientsGenerationApp.dll"]
+    environment:
+      - ApiSettings__BaseUrl=http://patientapi:5000
+
+networks:
+  app-network:
+    driver: bridge
