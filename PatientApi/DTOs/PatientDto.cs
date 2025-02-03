@@ -14,7 +14,7 @@ namespace PatientApi.DTOs
             {
                 if (string.IsNullOrEmpty(value))
                 {
-                    _gender = PatientApi.Models.Gender.Unknown.ToString().ToLower();
+                    _gender = Models.Gender.Unknown.ToString().ToLower();
                 }
                 else if (Enum.TryParse<Gender>(value, true, out var parsedGender))
                 {
@@ -22,7 +22,7 @@ namespace PatientApi.DTOs
                 }
                 else
                 {
-                    _gender = PatientApi.Models.Gender.Unknown.ToString().ToLower();  // если передано что-то, что не соответствует enum
+                    _gender = Models.Gender.Unknown.ToString().ToLower();
                 }
             }
         }

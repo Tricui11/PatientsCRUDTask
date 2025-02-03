@@ -58,7 +58,9 @@ namespace PatientApi.Controllers
                 .FirstOrDefaultAsync(p => p.Name.Id == id);
 
             if (patient == null)
+            {
                 return NotFound();
+            }
 
             var patientDto = new PatientDto
             {
@@ -133,7 +135,9 @@ namespace PatientApi.Controllers
                 .FirstOrDefaultAsync(p => p.Name.Id == id);
 
             if (patient == null)
+            {
                 return NotFound();
+            }
 
             patient.Name.Family = dto.Name.Family;
             patient.Name.Given = dto.Name.Given;
@@ -143,6 +147,7 @@ namespace PatientApi.Controllers
             patient.Active = dto.Active;
 
             await _context.SaveChangesAsync();
+
             return NoContent();
         }
 
@@ -155,7 +160,9 @@ namespace PatientApi.Controllers
         {
             var name = await _context.Names.FirstOrDefaultAsync(x => x.Id == id);
             if (name == null)
+            { 
                 return NotFound();
+            }
 
             _context.Names.Remove(name);
 
@@ -193,21 +200,23 @@ namespace PatientApi.Controllers
         public async Task<ActionResult<IEnumerable<PatientDto>>> SearchPatients([FromQuery] string birthDate)
         {
             if (string.IsNullOrEmpty(birthDate))
+            {
                 return BadRequest("birthDate parameter is required.");
+            }
 
             var query = _context.Patients.AsQueryable();
             DateTime dateTime;
 
-            // Проверка оператора (gt, lt, ge, le, eq, ne и т.д.)
             string operatorPrefix = birthDate.Substring(0, 2);
-
             if (operatorPrefix == "gt" || operatorPrefix == "lt" || operatorPrefix == "ge" || operatorPrefix == "le" ||
                 operatorPrefix == "eq" || operatorPrefix == "ne" || operatorPrefix == "sa" || operatorPrefix == "eb" || operatorPrefix == "ap")
             {
                 var dateStr = birthDate.Substring(2);
 
                 if (!CustomDateParser.TryParseDate(dateStr, out dateTime))
+                {
                     return BadRequest("Invalid birthDate format.");
+                }
 
                 switch (operatorPrefix)
                 {
