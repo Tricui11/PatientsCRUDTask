@@ -1,0 +1,236 @@
+{
+	"info": {
+		"_postman_id": "d381903c-33dd-440c-8e6a-967d1ea7d8a5",
+		"name": "Patient API Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13261186"
+	},
+	"item": [
+		{
+			"name": "https://localhost:7268/api/patients",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": {\r\n    \"id\": \"d8ff176f-bd0a-4b8e-b329-871952e32e1f\",\r\n    \"use\": \"official\",\r\n    \"family\": \"Иванов\",\r\n    \"given\": [\r\n      \"Иван\",\r\n      \"Иванович\"\r\n    ]\r\n  },\r\n  \"gender\": \"male\",\r\n  \"birthDate\": \"2024-01-13T18:25:43\",\r\n  \"active\": true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7268/api/patients",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7268",
+					"path": [
+						"api",
+						"patients"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://localhost:7268/api/patients",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:7268/api/patients",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7268",
+					"path": [
+						"api",
+						"patients"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://localhost:7268/api/patients/15B95FE1-9CE5-44B4-94C6-0CFDEEBD1855",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:7268/api/patients/15B95FE1-9CE5-44B4-94C6-0CFDEEBD1855",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7268",
+					"path": [
+						"api",
+						"patients",
+						"15B95FE1-9CE5-44B4-94C6-0CFDEEBD1855"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://localhost:7268/api/patients/15B95FE1-9CE5-44B4-94C6-0CFDEEBD1855",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": {\r\n    \"id\": \"d8ff176f-bd0a-4b8e-b329-871952e32e1f\",\r\n    \"use\": \"official\",\r\n    \"family\": \"Иванов\",\r\n    \"given\": [\r\n      \"Денис\",\r\n      \"Сергеевич\"\r\n    ]\r\n  },\r\n  \"gender\": \"male\",\r\n  \"birthDate\": \"2024-01-19T18:25:43\",\r\n  \"active\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7268/api/patients/15B95FE1-9CE5-44B4-94C6-0CFDEEBD1855",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7268",
+					"path": [
+						"api",
+						"patients",
+						"15B95FE1-9CE5-44B4-94C6-0CFDEEBD1855"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://localhost:7268/api/patients/15B95FE1-9CE5-44B4-94C6-0CFDEEBD1855",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:7268/api/patients/15B95FE1-9CE5-44B4-94C6-0CFDEEBD1855",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7268",
+					"path": [
+						"api",
+						"patients",
+						"15B95FE1-9CE5-44B4-94C6-0CFDEEBD1855"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://localhost:7268/api/patients/search?birthDate=ap2010-12-18%2012%3A23%3A10",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:7268/api/patients/search?birthDate=ap2010-12-18%2012%3A23%3A10",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7268",
+					"path": [
+						"api",
+						"patients",
+						"search"
+					],
+					"query": [
+						{
+							"key": "birthDate",
+							"value": "ap2010-12-18%2012%3A23%3A10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://localhost:7268/api/patients/search?birthDate=2015-05-31 02:30:32",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:7268/api/patients/search?birthDate=2015-05-31 02:30:32",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7268",
+					"path": [
+						"api",
+						"patients",
+						"search"
+					],
+					"query": [
+						{
+							"key": "birthDate",
+							"value": "2015-05-31 02:30:32"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://localhost:7268/api/patients/search?birthDate=eq2011-04-21",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:7268/api/patients/search?birthDate=eq2011-04-21",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7268",
+					"path": [
+						"api",
+						"patients",
+						"search"
+					],
+					"query": [
+						{
+							"key": "birthDate",
+							"value": "eq2011-04-21"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
