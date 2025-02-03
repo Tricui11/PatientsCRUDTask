@@ -13,17 +13,31 @@ class Program
         string apiUrl = $"{baseUrl}/api/Patients";
 
         using HttpClient client = new();
-        for (int i = 0; i < 100; i++)
+        while (true)
         {
-            var patient = GeneratePatient();
-            string json = JsonConvert.SerializeObject(patient, Formatting.Indented);
-            StringContent content = new(json, Encoding.UTF8, "application/json");
+            Console.WriteLine("Хотите добавить 100 записей? Нажмите Enter для добавления, или любую другую клавишу для выхода...");
+            string input = Console.ReadLine();
 
-            HttpResponseMessage response = await client.PostAsync(apiUrl, content);
-            Console.WriteLine($"[{i + 1}/100] Status: {response.StatusCode}");
+            if (string.IsNullOrEmpty(input))
+            {
+                for (int i = 0; i < 100; i++)
+                {
+                    var patient = GeneratePatient();
+                    string json = JsonConvert.SerializeObject(patient, Formatting.Indented);
+                    StringContent content = new(json, Encoding.UTF8, "application/json");
+
+                    HttpResponseMessage response = await client.PostAsync(apiUrl, content);
+                    Console.WriteLine($"[{i + 1}/100] Status: {response.StatusCode}");
+                }
+
+                Console.WriteLine("Добавление 100 пациентов завершено.");
+            }
+            else
+            {
+                Console.WriteLine("Завершаем программу.");
+                break;
+            }
         }
-
-        Console.WriteLine("Добавление 100 пациентов завершено.");
     }
 
     static IConfiguration LoadConfiguration()
