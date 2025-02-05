@@ -30,15 +30,12 @@ namespace PatientApi.Data
 
             modelBuilder.Entity<Patient>()
                 .Property(p => p.BirthDate)
-                .HasColumnType("datetime2(0)");
+                .HasColumnType("datetime2(0)")
+                .IsRequired();
 
             modelBuilder.Entity<Patient>()
                 .Property(p => p.Gender)
                 .HasConversion<string>();
-
-            modelBuilder.Entity<Patient>()
-                .Property(n => n.BirthDate)
-                .IsRequired();
 
             modelBuilder.Entity<Name>()
                 .HasKey(n => n.Id);

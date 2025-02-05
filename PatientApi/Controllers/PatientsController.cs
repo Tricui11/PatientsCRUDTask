@@ -4,6 +4,7 @@ using PatientApi.Data;
 using PatientApi.DTOs;
 using PatientApi.Helpers;
 using PatientApi.Models;
+using System.Linq.Expressions;
 
 namespace PatientApi.Controllers
 {
@@ -196,67 +197,26 @@ namespace PatientApi.Controllers
         /// <response code="200">Returns the list of found patients.</response>
         /// <response code="400">If the birthDate format is invalid.</response>
         [HttpGet("search")]
-        public async Task<ActionResult<IEnumerable<PatientDto>>> SearchPatients([FromQuery] string birthDate)
+        public async Task<ActionResult<IEnumerable<PatientDto>>> SearchPatients([FromQuery] List<string> birthDate)
         {
-            if (string.IsNullOrEmpty(birthDate))
+            if (birthDate == null || birthDate.Count == 0)
             {
-                return BadRequest("birthDate parameter is required.");
+                return BadRequest("At least one birthDate parameter is required.");
             }
 
             var query = _context.Patients.AsQueryable();
-            DateTime dateTime;
 
-            string operatorPrefix = birthDate.Substring(0, 2);
-            if (operatorPrefix == "gt" || operatorPrefix == "lt" || operatorPrefix == "ge" || operatorPrefix == "le" ||
-                operatorPrefix == "eq" || operatorPrefix == "ne" || operatorPrefix == "sa" || operatorPrefix == "eb" || operatorPrefix == "ap")
+            foreach (var dateFilter in birthDate)
             {
-                var dateStr = birthDate.Substring(2);
-
-                if (!CustomDateParser.TryParseDate(dateStr, out dateTime))
+                if (!TryParseDateFilter(dateFilter, out Expression<Func<Patient, bool>> filter))
                 {
-                    return BadRequest("Invalid birthDate format.");
+                    return BadRequest($"Invalid birthDate format: {dateFilter}");
                 }
 
-                switch (operatorPrefix)
-                {
-                    case "gt":
-                    case "sa":
-                        query = query.Where(p => p.BirthDate > dateTime);
-                        break;
-                    case "lt":
-                    case "eb":
-                        query = query.Where(p => p.BirthDate < dateTime);
-                        break;
-                    case "ge":
-                        query = query.Where(p => p.BirthDate >= dateTime);
-                        break;
-                    case "le":
-                        query = query.Where(p => p.BirthDate <= dateTime);
-                        break;
-                    case "eq":
-                        query = query.Where(p => p.BirthDate.Date == dateTime.Date);
-                        break;
-                    case "ne":
-                        query = query.Where(p => p.BirthDate.Date != dateTime.Date);
-                        break;
-                    case "ap":
-                        TimeSpan range = DateTime.UtcNow - dateTime;
-                        TimeSpan tolerance = TimeSpan.FromTicks((long)(range.Ticks * 0.1));
-                        query = query.Where(p => p.BirthDate >= dateTime - tolerance && p.BirthDate <= dateTime + tolerance);
-                        break;
-                }
-            }
-            else if (CustomDateParser.TryParseDate(birthDate, out dateTime))
-            {
-                query = query.Where(p => p.BirthDate == dateTime);
-            }
-            else
-            {
-                return BadRequest("Invalid birthDate format.");
+                query = query.Where(filter);
             }
 
             var patients = await query
-                .Include(p => p.Name)
                 .Select(p => new PatientDto
                 {
                     Name = new NameDto
@@ -273,6 +233,74 @@ namespace PatientApi.Controllers
                 .ToListAsync();
 
             return Ok(patients);
+        }
+
+        private static bool TryParseDateFilter(string dateFilter, out Expression<Func<Patient, bool>> filter)
+        {
+            filter = null;
+
+            if (string.IsNullOrEmpty(dateFilter))
+            {
+                return false;
+            }
+            if (dateFilter.Length < 2)
+            {
+                return false;
+            }
+
+            string operatorPrefix = dateFilter.Substring(0, 2);
+            DateTime dateTime;
+
+            if (operatorPrefix == "gt" || operatorPrefix == "lt" || operatorPrefix == "ge" || operatorPrefix == "le" ||
+                operatorPrefix == "eq" || operatorPrefix == "ne" || operatorPrefix == "sa" || operatorPrefix == "eb" || operatorPrefix == "ap")
+            {
+                var dateStr = dateFilter.Substring(2);
+
+                if (!CustomDateParser.TryParseDate(dateStr, out dateTime))
+                {
+                    return false;
+                }
+
+                switch (operatorPrefix)
+                {
+                    case "gt":
+                    case "sa":
+                        filter = p => p.BirthDate > dateTime;
+                        break;
+                    case "lt":
+                    case "eb":
+                        filter = p => p.BirthDate < dateTime;
+                        break;
+                    case "ge":
+                        filter = p => p.BirthDate >= dateTime;
+                        break;
+                    case "le":
+                        filter = p => p.BirthDate <= dateTime;
+                        break;
+                    case "eq":
+                        filter = p => p.BirthDate.Date == dateTime.Date;
+                        break;
+                    case "ne":
+                        filter = p => p.BirthDate.Date != dateTime.Date;
+                        break;
+                    case "ap":
+                        TimeSpan tolerance = TimeSpan.FromDays(1);
+                        filter = p => p.BirthDate >= dateTime - tolerance && p.BirthDate <= dateTime + tolerance;
+                        break;
+                    default:
+                        return false;
+                }
+            }
+            else if (CustomDateParser.TryParseDate(dateFilter, out dateTime))
+            {
+                filter = p => p.BirthDate == dateTime;
+            }
+            else
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

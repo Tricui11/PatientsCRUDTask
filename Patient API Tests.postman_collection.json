@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "d381903c-33dd-440c-8e6a-967d1ea7d8a5",
+		"_postman_id": "404746c8-b361-4029-8699-081c565c9023",
 		"name": "Patient API Tests",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "13261186"
@@ -226,6 +226,40 @@
 						{
 							"key": "birthDate",
 							"value": "eq2011-04-21"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://localhost:5000/api/Patients/search?birthDate=lt2014-07-31&birthDate=gt2014-01-07T02%3A07%3A46",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:5000/api/Patients/search?birthDate=lt2014-07-31&birthDate=gt2014-01-07T02%3A07%3A46",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"Patients",
+						"search"
+					],
+					"query": [
+						{
+							"key": "birthDate",
+							"value": "lt2014-07-31"
+						},
+						{
+							"key": "birthDate",
+							"value": "gt2014-01-07T02%3A07%3A46"
 						}
 					]
 				}
