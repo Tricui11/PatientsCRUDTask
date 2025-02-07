@@ -17,6 +17,7 @@ namespace PatientApi.Controllers
         public PatientsController(ApplicationDbContext context)
         {
             _context = context;
+            context.Database.Migrate();
         }
 
         /// <summary>

@@ -1,13 +1,13 @@
 {
 	"info": {
-		"_postman_id": "404746c8-b361-4029-8699-081c565c9023",
+		"_postman_id": "891101bf-33e0-4d3c-a7d3-2c3bb0864ff3",
 		"name": "Patient API Tests",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "13261186"
 	},
 	"item": [
 		{
-			"name": "https://localhost:5000/api/patients",
+			"name": "http://localhost:5000/api/patients",
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -24,8 +24,8 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost:5000/api/patients",
-					"protocol": "https",
+					"raw": "http://localhost:5000/api/patients",
+					"protocol": "http",
 					"host": [
 						"localhost"
 					],
@@ -39,7 +39,7 @@
 			"response": []
 		},
 		{
-			"name": "https://localhost:5000/api/patients",
+			"name": "http://localhost:5000/api/patients",
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -47,8 +47,8 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://localhost:5000/api/patients",
-					"protocol": "https",
+					"raw": "http://localhost:5000/api/patients",
+					"protocol": "http",
 					"host": [
 						"localhost"
 					],
@@ -62,7 +62,7 @@
 			"response": []
 		},
 		{
-			"name": "https://localhost:5000/api/patients/15B95FE1-9CE5-44B4-94C6-0CFDEEBD1855",
+			"name": "http://localhost:5000/api/patients/d8ff176f-bd0a-4b8e-b329-871952e32e1f",
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -70,8 +70,8 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://localhost:5000/api/patients/15B95FE1-9CE5-44B4-94C6-0CFDEEBD1855",
-					"protocol": "https",
+					"raw": "http://localhost:5000/api/patients/d8ff176f-bd0a-4b8e-b329-871952e32e1f",
+					"protocol": "http",
 					"host": [
 						"localhost"
 					],
@@ -79,14 +79,14 @@
 					"path": [
 						"api",
 						"patients",
-						"15B95FE1-9CE5-44B4-94C6-0CFDEEBD1855"
+						"d8ff176f-bd0a-4b8e-b329-871952e32e1f"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "https://localhost:5000/api/patients/15B95FE1-9CE5-44B4-94C6-0CFDEEBD1855",
+			"name": "http://localhost:5000/api/patients/d8ff176f-bd0a-4b8e-b329-871952e32e1f",
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -103,8 +103,8 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost:5000/api/patients/15B95FE1-9CE5-44B4-94C6-0CFDEEBD1855",
-					"protocol": "https",
+					"raw": "http://localhost:5000/api/patients/d8ff176f-bd0a-4b8e-b329-871952e32e1f",
+					"protocol": "http",
 					"host": [
 						"localhost"
 					],
@@ -112,14 +112,14 @@
 					"path": [
 						"api",
 						"patients",
-						"15B95FE1-9CE5-44B4-94C6-0CFDEEBD1855"
+						"d8ff176f-bd0a-4b8e-b329-871952e32e1f"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "https://localhost:5000/api/patients/15B95FE1-9CE5-44B4-94C6-0CFDEEBD1855",
+			"name": "http://localhost:5000/api/patients/d8ff176f-bd0a-4b8e-b329-871952e32e1f",
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -127,8 +127,8 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "https://localhost:5000/api/patients/15B95FE1-9CE5-44B4-94C6-0CFDEEBD1855",
-					"protocol": "https",
+					"raw": "http://localhost:5000/api/patients/d8ff176f-bd0a-4b8e-b329-871952e32e1f",
+					"protocol": "http",
 					"host": [
 						"localhost"
 					],
@@ -136,14 +136,14 @@
 					"path": [
 						"api",
 						"patients",
-						"15B95FE1-9CE5-44B4-94C6-0CFDEEBD1855"
+						"d8ff176f-bd0a-4b8e-b329-871952e32e1f"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "https://localhost:5000/api/patients/search?birthDate=ap2010-12-18%2012%3A23%3A10",
+			"name": "http://localhost:5000/api/patients/search?birthDate=ap2010-12-18%2012%3A23%3A10",
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -151,8 +151,8 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://localhost:5000/api/patients/search?birthDate=ap2010-12-18%2012%3A23%3A10",
-					"protocol": "https",
+					"raw": "http://localhost:5000/api/patients/search?birthDate=ap2010-12-18%2012%3A23%3A10",
+					"protocol": "http",
 					"host": [
 						"localhost"
 					],
@@ -173,7 +173,7 @@
 			"response": []
 		},
 		{
-			"name": "https://localhost:5000/api/patients/search?birthDate=2015-05-31 02:30:32",
+			"name": "http://localhost:5000/api/patients/search?birthDate=2015-05-31 02:30:32",
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -181,8 +181,8 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://localhost:5000/api/patients/search?birthDate=2015-05-31 02:30:32",
-					"protocol": "https",
+					"raw": "http://localhost:5000/api/patients/search?birthDate=2015-05-31 02:30:32",
+					"protocol": "http",
 					"host": [
 						"localhost"
 					],
@@ -203,7 +203,7 @@
 			"response": []
 		},
 		{
-			"name": "https://localhost:5000/api/patients/search?birthDate=eq2011-04-21",
+			"name": "http://localhost:5000/api/patients/search?birthDate=eq2014-07-18",
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -211,8 +211,8 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://localhost:5000/api/patients/search?birthDate=eq2011-04-21",
-					"protocol": "https",
+					"raw": "http://localhost:5000/api/patients/search?birthDate=eq2014-07-18",
+					"protocol": "http",
 					"host": [
 						"localhost"
 					],
@@ -225,7 +225,7 @@
 					"query": [
 						{
 							"key": "birthDate",
-							"value": "eq2011-04-21"
+							"value": "eq2014-07-18"
 						}
 					]
 				}
@@ -233,7 +233,7 @@
 			"response": []
 		},
 		{
-			"name": "https://localhost:5000/api/Patients/search?birthDate=lt2014-07-31&birthDate=gt2014-01-07T02%3A07%3A46",
+			"name": "http://localhost:5000/api/Patients/search?birthDate=lt2014-07-31&birthDate=gt2014-01-07T02%3A07%3A46",
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -241,8 +241,8 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://localhost:5000/api/Patients/search?birthDate=lt2014-07-31&birthDate=gt2014-01-07T02%3A07%3A46",
-					"protocol": "https",
+					"raw": "http://localhost:5000/api/Patients/search?birthDate=lt2014-07-31&birthDate=gt2014-01-07T02%3A07%3A46",
+					"protocol": "http",
 					"host": [
 						"localhost"
 					],
