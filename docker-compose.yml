@@ -34,12 +34,12 @@ services:
       dockerfile: ./PatientsGenerationApp/Dockerfile
     container_name: patientsgenerationapp
     depends_on:
-      - db
+      - patientapi
     networks:
       - app-network
     entrypoint: ["dotnet", "PatientsGenerationApp.dll"]
     environment:
-      - ApiSettings__BaseUrl=http://patientapi:5000
+      - ApiSettings__BaseUrl=http://patientapi:80
 
 networks:
   app-network:
